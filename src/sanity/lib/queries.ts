@@ -412,6 +412,7 @@ export async function getBlogBySlug(slug: string): Promise<Blog | null> {
       "views": coalesce(views, 0),
       "coverImageUrl": coverImage.asset->url,
       "imageUrls": images[].asset->url,
+      description,
       content
     }
   `, { slug })
