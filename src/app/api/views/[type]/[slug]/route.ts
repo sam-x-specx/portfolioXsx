@@ -53,23 +53,43 @@
 
 
 
+// import { NextRequest, NextResponse } from 'next/server'
+// // Import your Sanity client or database logic here
+// // import { client } from '@/sanity/lib/client'
+
+// export async function POST(
+//   request: NextRequest,
+//   { params }: { params: { slug: string } }
+// ) {
+//   const slug = params.slug
+
+//   try {
+//     // TODO: Increment the view count in your database (Sanity, Prisma, etc.)
+//     // Example with Sanity (you'll need to adjust):
+//     // await client.patch(slug).inc({ views: 1 }).commit()
+
+//     // For now, return current/fake views (replace with real logic)
+//     const newViews = 42 // ← replace with actual incremented value
+
+//     return NextResponse.json({ views: newViews })
+//   } catch (error) {
+//     console.error('Error updating views:', error)
+//     return NextResponse.json({ error: 'Failed to update views' }, { status: 500 })
+//   }
+// }
+
+
+
 import { NextRequest, NextResponse } from 'next/server'
-// Import your Sanity client or database logic here
-// import { client } from '@/sanity/lib/client'
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ type: string; slug: string }> }
 ) {
-  const slug = params.slug
+  const { slug } = await params
 
   try {
-    // TODO: Increment the view count in your database (Sanity, Prisma, etc.)
-    // Example with Sanity (you'll need to adjust):
-    // await client.patch(slug).inc({ views: 1 }).commit()
-
-    // For now, return current/fake views (replace with real logic)
-    const newViews = 42 // ← replace with actual incremented value
+    const newViews = 42 // ← replace with actual logic
 
     return NextResponse.json({ views: newViews })
   } catch (error) {
