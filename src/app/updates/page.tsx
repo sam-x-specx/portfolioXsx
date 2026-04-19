@@ -136,6 +136,7 @@ function LoadingState() {
   )
 }
 
+
 export default function UpdatesPage() {
   const { data: session, status } = useSession()
   const [updates, setUpdates]     = useState<Update[]>([])

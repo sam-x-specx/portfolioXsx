@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { getPostBySlug } from '@/sanity/lib/queries'
 import { PortableText, PortableTextComponents } from '@portabletext/react'
 import type { PortableTextBlock } from '@portabletext/types'
+import type { Metadata } from 'next'
 
 const ptComponents: PortableTextComponents = {
   block: {
@@ -41,6 +42,36 @@ const ptComponents: PortableTextComponents = {
       </a>
     ),
   },
+}
+
+// Dynamic metadata based on the post (slug/topic)
+export async function generateMetadata({ 
+  params 
+}: { 
+  params: Promise<{ slug: string }> 
+}): Promise<Metadata> {
+  const { slug } = await params
+  const post = await getPostBySlug(slug)
+
+  if (!post) {
+    return {
+      title: 'Post Not Found',
+      description: 'The requested writing could not be found.',
+    }
+  }
+
+  return {
+    title: post.title,
+    description: post.description || 'Read this insightful writing on my blog.',
+    // Optional: Add more SEO fields
+    openGraph: {
+      title: post.title,
+      description: post.description,
+      // images: post.image ? [post.image] : [], // uncomment if you have an image field
+    },
+    // You can also add keywords, authors, etc. if available in your post
+    // keywords: post.tags || [],
+  }
 }
 
 export default async function WritingPost({ params }: { params: Promise<{ slug: string }> }) {

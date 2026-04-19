@@ -2,6 +2,14 @@ import Link from 'next/link'
 import { getAllPosts } from '@/sanity/lib/queries'
 import type { Post } from '@/sanity/lib/queries'
 
+export const metadata = {
+  title: "Writing",
+  description: "Thoughts, insights, and tutorials on software engineering, technology, and development.",
+  icons: {
+    icon: "/favicon.ico", // or /icon.png
+  },
+};
+
 export default async function Writing() {
   const posts = await getAllPosts()
 

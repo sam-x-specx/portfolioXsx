@@ -455,11 +455,121 @@
 
 
 
+// import { notFound } from 'next/navigation'
+// import { getProjectBySlug } from '@/sanity/lib/queries'
+// import MarkdownContent from '@/app/components/MarkdownContent'
+
+// export default async function ProjectPost({ params }: { params: Promise<{ slug: string }> }) {
+//   const { slug } = await params
+//   const project = await getProjectBySlug(slug)
+
+//   if (!project) return notFound()
+
+//   return (
+//     <main className="min-h-screen bg-[#030712] text-white font-sans px-6 py-24">
+//       <div className="max-w-2xl mx-auto flex flex-col gap-6">
+
+//         {/* Cover Image */}
+//         {project.imageUrl && (
+//           <img
+//             src={project.imageUrl}
+//             alt={project.title}
+//             className="w-full rounded-xl object-cover max-h-[420px]"
+//           />
+//         )}
+
+//         <h1 className="text-4xl font-bold tracking-tight">{project.title}</h1>
+
+//         {project.description && (
+//           <p className="text-gray-400 text-lg leading-relaxed">{project.description}</p>
+//         )}
+
+//         {project.techStack && project.techStack.length > 0 && (
+//           <div className="flex flex-wrap gap-2">
+//             {project.techStack.map((tech: string) => (
+//               <span key={tech} className="text-xs bg-gray-800 px-3 py-1 rounded-full text-gray-400">
+//                 {tech}
+//               </span>
+//             ))}
+//           </div>
+//         )}
+
+//         <hr className="border-gray-800 my-10" />
+
+//         {/* Markdown Content - Final Version */}
+//         {project.content && typeof project.content === 'string' && project.content.trim().length > 10 ? (
+//           <div className="prose prose-invert max-w-none">
+//             <MarkdownContent content={project.content} />
+//           </div>
+//         ) : (
+//           <p className="text-gray-500 italic py-10">No content found in Sanity.</p>
+//         )}
+
+//       </div>
+//     </main>
+//   )
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getProjectBySlug } from '@/sanity/lib/queries'
 import MarkdownContent from '@/app/components/MarkdownContent'
 
-export default async function ProjectPost({ params }: { params: Promise<{ slug: string }> }) {
+type Props = { params: Promise<{ slug: string }> }
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
+  const project = await getProjectBySlug(slug)
+
+  if (!project) return { title: 'Project Not Found' }
+
+  return {
+    title: project.title,
+    description: project.description ?? 'A project by me.',
+    openGraph: {
+      title: project.title,
+      description: project.description ?? '',
+      images: project.imageUrl ? [{ url: project.imageUrl }] : [],
+      type: 'article',
+    },
+    twitter: {
+      card: project.imageUrl ? 'summary_large_image' : 'summary',
+      title: project.title,
+      description: project.description ?? '',
+      images: project.imageUrl ? [project.imageUrl] : [],
+    },
+  }
+}
+
+export default async function ProjectPost({ params }: Props) {
   const { slug } = await params
   const project = await getProjectBySlug(slug)
 
@@ -496,7 +606,6 @@ export default async function ProjectPost({ params }: { params: Promise<{ slug: 
 
         <hr className="border-gray-800 my-10" />
 
-        {/* Markdown Content - Final Version */}
         {project.content && typeof project.content === 'string' && project.content.trim().length > 10 ? (
           <div className="prose prose-invert max-w-none">
             <MarkdownContent content={project.content} />
@@ -509,10 +618,6 @@ export default async function ProjectPost({ params }: { params: Promise<{ slug: 
     </main>
   )
 }
-
-
-
-
 
 
 

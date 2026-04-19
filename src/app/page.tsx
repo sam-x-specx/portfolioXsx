@@ -65,6 +65,14 @@ function VerifiedBadge({ size = 28 }: { size?: number }) {
   )
 }
 
+export const metadata = {
+  title: "Sam",
+  description: "Software Engineer & Technology Enthusiast",
+  icons: {
+    icon: "/favicon.ico", // or /icon.png
+  },
+};
+
 
 export default async function Home() {
   const [profile, posts, projects, experiences] = await Promise.all([
