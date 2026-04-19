@@ -388,8 +388,8 @@ export async function getFeaturedExperiences(): Promise<Experience[]> {
 // ── Blogs ──────────────────────────────────────────────────────
 
 export async function getAllBlogs(): Promise<Blog[]> {
-  return client.fetch(`
-    *[_type == "blog"] | order(coalesce(publishedAt, _createdAt) desc) {
+  return client.fetch(
+    `*[_type == "blog"] | order(coalesce(publishedAt, _createdAt) desc) {
       _id,
       "title": coalesce(title, "Untitled"),
       "slug": coalesce(slug, {"current": _id}),
@@ -398,8 +398,10 @@ export async function getAllBlogs(): Promise<Blog[]> {
       description,
       "coverImageUrl": coverImage.asset->url,
       "imageUrls": images[].asset->url
-    }
-  `)
+    }`,
+    {},
+    { next: { revalidate: 10 } }
+  )
 }
 
 export async function getBlogBySlug(slug: string): Promise<Blog | null> {
