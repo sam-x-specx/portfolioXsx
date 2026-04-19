@@ -11,10 +11,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: blog.title,
-    description: blog.excerpt ?? 'Read the latest post.',
+    description: blog.description ?? 'Read the latest post.',
     openGraph: {
       title: blog.title,
-      description: blog.excerpt ?? '',
+      description: blog.description ?? '',
       images: blog.coverImageUrl ? [{ url: blog.coverImageUrl }] : [],
       type: 'article',
       publishedTime: blog.publishedAt,
@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: blog.coverImageUrl ? 'summary_large_image' : 'summary',
       title: blog.title,
-      description: blog.excerpt ?? '',
+      description: blog.description ?? '',
       images: blog.coverImageUrl ? [blog.coverImageUrl] : [],
     },
   }
